@@ -1,5 +1,6 @@
 import client
 import argparse
+import sys
 
 
 def get_args():
@@ -52,7 +53,20 @@ def main():
 
     except Exception as e:
         print(e)
-        # TODO something with exit codes.
+
+        exit_code = EXIT_CODE_UNKNOWN_ERROR
+
+        if isinstance(e, client.AuthenticationError):
+            exit_code = EXIT_CODE_AUTHENTICATION_ERROR
+        elif isinstance(e, client.EngineWrongStatusError):
+            exit_code = EXIT_CODE_ENGINE_WRONG_STATUS
+        elif isinstance(e, client.RequestError):
+            if e.is_client_error():
+                exit_code = EXIT_CODE_REQUEST_CLIENT_ERROR
+            else:
+                exit_code = EXIT_CODE_REQUEST_SERVER_ERROR
+        
+        sys.exit(exit_code)
 
 
 if __name__ == '__main__':
