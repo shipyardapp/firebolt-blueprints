@@ -2,6 +2,7 @@ import client
 import argparse
 import os
 import sys
+import csv
 
 
 EXIT_CODE_UNKNOWN_ERROR = 3
@@ -16,7 +17,7 @@ def get_args():
     parser.add_argument('--email', dest='email', required=True)
     parser.add_argument('--password', dest='password', required=True)
     parser.add_argument('--database', dest='database', required=True)
-    parser.add_argument('--engine-name', dest='engine', required=True)
+    parser.add_argument('--engine-name', dest='engine_name', required=True)
     parser.add_argument('--query', dest='query', required=True)
     parser.add_argument(
             '--start-wait-engine',
@@ -112,16 +113,17 @@ def main():
         os.makedirs(destination_folder_name)
 
     try:
-        client = client.Client(email, password)
+        fc = client.Client(email, password)
 
-        engine_id = client.get_engine_id(engine_name)
-        engine = client.describe_engine(engine_id)
+        engine_id = fc.get_engine_id(engine_name)
+        engine = fc.describe_engine(engine_id)
         endpoint = engine['endpoint']
 
         if start_wait_engine:
-            client.start_engine(engine_id)
-            client.wait_engine_status(engine_id, client.ENGINE_STATUS_RUNNING)
+            fc.start_engine(engine_id)
+            fc.wait_engine_status(engine_id, client.ENGINE_STATUS_RUNNING)
 
+        result = fc.query(endpoint, database, query)
         write_result(result, destination_full_path, file_header)
 
     except Exception as e:
