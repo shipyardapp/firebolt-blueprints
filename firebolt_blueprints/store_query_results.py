@@ -1,8 +1,13 @@
-import client
 import argparse
 import os
 import sys
 import csv
+
+# Handle import difference between local and github install
+try:
+    import client
+except BaseException:
+    from . import client
 
 
 EXIT_CODE_UNKNOWN_ERROR = 3
@@ -20,11 +25,11 @@ def get_args():
     parser.add_argument('--engine-name', dest='engine_name', required=True)
     parser.add_argument('--query', dest='query', required=True)
     parser.add_argument(
-            '--start-wait-engine',
-            dest='start_wait_engine',
-            default='True',
-            required=False,
-            )
+        '--start-wait-engine',
+        dest='start_wait_engine',
+        default='True',
+        required=False,
+    )
     parser.add_argument(
         '--destination-file-name',
         dest='destination_file_name',
@@ -140,10 +145,9 @@ def main():
                 exit_code = EXIT_CODE_REQUEST_CLIENT_ERROR
             else:
                 exit_code = EXIT_CODE_REQUEST_SERVER_ERROR
-        
+
         sys.exit(exit_code)
 
 
 if __name__ == '__main__':
     main()
-
