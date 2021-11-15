@@ -186,7 +186,7 @@ class RequestError(Exception):
 
     
     def __str__(self):
-        return ': '.join(self._req, self._resp, self._resp.text)
+        return ': '.join([str(self._req), str(self._resp), str(self._resp.text)])
 
 
 class EngineWrongStatusError(Exception):

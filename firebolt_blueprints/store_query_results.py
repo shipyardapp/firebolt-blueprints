@@ -131,6 +131,8 @@ def main():
         result = fc.query(endpoint, database, query)
         write_result(result, destination_full_path, file_header)
 
+        print(f'Successfully wrote query results to {destination_full_path}')
+
     except Exception as e:
         print(e, file=sys.stderr)
 
