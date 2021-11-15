@@ -161,6 +161,10 @@ class AuthenticationError(Exception):
         self.email = email
 
 
+    def __str__(self):
+        return f'authentication error with {email} and password'
+
+
 class RequestError(Exception):
     def __init__(self, req, resp):
         self._req = req
@@ -179,6 +183,10 @@ class RequestError(Exception):
 
     def status_code(self):
         return self._resp.status_code
+
+    
+    def __str__(self):
+        return ': '.join(self._req, self._resp, self._resp.text)
 
 
 class EngineWrongStatusError(Exception):
